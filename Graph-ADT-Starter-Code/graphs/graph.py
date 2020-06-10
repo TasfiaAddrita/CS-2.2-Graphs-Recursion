@@ -22,7 +22,7 @@ class Vertex(object):
         Parameters:
         vertex_obj (Vertex): An instance of Vertex to be stored as a neighbor.
         """
-        pass
+        self.__neighbors_dict[vertex_obj.__id] = vertex_obj
 
     def __str__(self):
         """Output the list of neighbors of this vertex."""
@@ -66,8 +66,8 @@ class Graph:
         Returns:
         Vertex: The new vertex object.
         """
-        pass
-        
+        self.__vertex_dict[vertex_id] = Vertex(vertex_id)
+        return self.__vertex_dict[vertex_id]
 
     def get_vertex(self, vertex_id):
         """Return the vertex if it exists."""
@@ -85,7 +85,10 @@ class Graph:
         vertex_id1 (string): The unique identifier of the first vertex.
         vertex_id2 (string): The unique identifier of the second vertex.
         """
-        pass
+        v2 = self.get_vertex(vertex_id2)
+        self.__vertex_dict[vertex_id1].add_neighbor(v2)
+        if not self.__is_directed:
+            self.__vertex_dict[vertex_id2].add_neighbor(self.__vertex_dict[vertex_id1])
         
     def get_vertices(self):
         """
@@ -95,10 +98,6 @@ class Graph:
         List<Vertex>: The vertex objects contained in the graph.
         """
         return list(self.__vertex_dict.values())
-
-    def get_vertex(self, vertex_id):
-        """Return the vertex with given id."""
-        return self.__vertex_dict[vertex_id]
 
     def contains_id(self, vertex_id):
         return vertex_id in self.__vertex_dict
@@ -169,11 +168,8 @@ class Graph:
             current_vertex_obj = queue.pop() # vertex obj to visit next
             current_vertex_id = current_vertex_obj.get_id()
 
-            # found target, can stop the loop early
-            if current_vertex_id == target_id:
-                break
-
             neighbors = current_vertex_obj.get_neighbors()
+
             for neighbor in neighbors:
                 if neighbor.get_id() not in vertex_id_to_path:
                     current_path = vertex_id_to_path[current_vertex_id]
@@ -181,7 +177,6 @@ class Graph:
                     next_path = current_path + [neighbor.get_id()]
                     vertex_id_to_path[neighbor.get_id()] = next_path
                     queue.append(neighbor)
-                    # print(vertex_id_to_path)
 
         if target_id not in vertex_id_to_path: # path not found
             return None
@@ -199,4 +194,41 @@ class Graph:
         Returns:
         list<string>: All vertex ids that are `target_distance` away from the start vertex
         """
-        pass
+    
+        vertices_n_distance = {
+            start_id: 0
+        }
+        solutions = []
+        seen = set()
+        seen.add(start_id)
+
+        queue = deque()
+        queue.append(self.get_vertex(start_id))
+
+        stop = False
+
+        while queue:
+            # stop = False
+            vertex_object = queue.pop()
+            vertex_id = vertex_object.get_id()
+
+            neighbors = vertex_object.get_neighbors()
+
+            # flag if we reach a vertex that is right before the final vertex
+            # to avoid running extra traversals
+            if vertices_n_distance[vertex_id] == target_distance - 1:
+                stop = True
+
+            for neighbor in neighbors:
+                neighbor_id = neighbor.get_id()
+                if neighbor_id not in seen:
+                    if neighbor_id not in vertices_n_distance:
+                        vertices_n_distance[neighbor_id] = vertices_n_distance[vertex_id]
+                    vertices_n_distance[neighbor_id] += 1
+                    if vertices_n_distance[neighbor_id] == target_distance:
+                        solutions.append(neighbor_id)
+                    if stop == False:
+                        seen.add(neighbor_id)
+                        queue.append(neighbor)
+        return solutions
+

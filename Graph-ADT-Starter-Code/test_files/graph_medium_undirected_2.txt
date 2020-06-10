@@ -1,0 +1,12 @@
+G
+A,B,C,D,E,F,Z
+(A,B)
+(A,C)
+(B,C)
+(B,D)
+(B,Z)
+(C,D)
+(C,E)
+(D,E)
+(D,F)
+(E,F)
