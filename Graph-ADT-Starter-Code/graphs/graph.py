@@ -383,6 +383,7 @@ class Graph:
         is_cycle = dfs_cycle(start_obj, visited, recursion_stack)
         return is_cycle
 
+    # TODO 
     def topological_sort(self):
         """
         Return a valid ordering of vertices in a directed acyclic graph.
@@ -391,6 +392,17 @@ class Graph:
         # will submit this part late
         pass 
 
+    # TODO 
+    def greedy_coloring(self):
+        """Return a dictionary of vertex id -> color."""
+        vertex_id_color = {}
+
+        # TODO: Fill in the dictionary by visiting each vertex and checking the 
+        # colors of its neighbors, then assigning the “smallest” color which has 
+        # not yet been assigned.
+        
+        return vertex_id_color
+        
 
 if __name__ == "__main__":
     graph = Graph(is_directed=True)

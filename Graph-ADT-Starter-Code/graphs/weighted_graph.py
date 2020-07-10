@@ -234,7 +234,7 @@ class WeightedGraph(Graph):
             for neighbor in neighbors:
                 neighbor_id, neighbor_dist = neighbor[0].get_id(), neighbor[1]
                 if neighbor_id in vertex_to_distance:
-                                        new_dist = current_vertex_dist + neighbor_dist
+                    new_dist = current_vertex_dist + neighbor_dist
                     if new_dist < vertex_to_distance[neighbor_id]:
                         vertex_to_distance[neighbor_id] = new_dist
             
